@@ -190,7 +190,7 @@ textarea {
   }
 }
 
-/* Hide Emergent badge */
+/* Hide Emergent badge completely */
 [data-emergent-badge],
 .emergent-badge,
 [class*="emergent"],
@@ -198,18 +198,30 @@ div[style*="Made with Emergent"],
 a[href*="emergent.sh"],
 a[href*="emergent"],
 div[class*="fixed"][class*="bottom"],
-div[style*="position: fixed"][style*="bottom"] {
+div[style*="position: fixed"][style*="bottom"],
+iframe[src*="emergent"],
+div[id*="emergent"],
+#emergent-badge,
+.emergent-watermark {
   display: none !important;
   visibility: hidden !important;
   opacity: 0 !important;
   pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  position: absolute !important;
+  left: -9999px !important;
 }
 
 /* Hide any fixed positioned badge in bottom right */
 body > div:last-child[style*="position: fixed"],
 body > div:last-child a[href*="emergent"],
-body > div[style*="fixed"][style*="right"][style*="bottom"] {
+body > div[style*="fixed"][style*="right"][style*="bottom"],
+body > div:not(#root)[style*="position: fixed"] {
   display: none !important;
   visibility: hidden !important;
   opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
 }
