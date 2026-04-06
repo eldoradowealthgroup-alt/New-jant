@@ -1,5 +1,5 @@
 {
-  "summary": "11/11 tests passed",
+  "summary": "14/14 tests passed",
   "success_rate": "100.0%",
   "results": [
     {
@@ -15,27 +15,37 @@
     {
       "test": "Admin submissions",
       "success": true,
-      "details": "Status: 200, Submissions count: 0"
+      "details": "Status: 200, Submissions count: 6"
+    },
+    {
+      "test": "Admin CSV export",
+      "success": true,
+      "details": "Status: 200, Content-Type: text/csv; charset=utf-8 - CSV export working correctly"
+    },
+    {
+      "test": "Admin audit logs",
+      "success": true,
+      "details": "Status: 200, Audit logs count: 4 - All required fields present"
     },
     {
       "test": "User registration",
       "success": true,
-      "details": "Status: 200, User ID: f7ec97d8-4df0-4b5a-876a-5e3f9eda4728"
+      "details": "Status: 200, User ID: 64a7a3dc-43f1-40fd-8651-b05dc8a58f94"
     },
     {
       "test": "User login",
       "success": true,
-      "details": "Status: 200, User ID: f7ec97d8-4df0-4b5a-876a-5e3f9eda4728, Is Admin: False"
+      "details": "Status: 200, User ID: 64a7a3dc-43f1-40fd-8651-b05dc8a58f94, Is Admin: False"
     },
     {
       "test": "Get user profile",
       "success": true,
-      "details": "Status: 200, Profile: {'id': 'f7ec97d8-4df0-4b5a-876a-5e3f9eda4728', 'email': 'test_20260406_202913@example.com', 'name': None, 'address': None, 'dob': None, 'phone': None}"
+      "details": "Status: 200, Profile: {'id': '64a7a3dc-43f1-40fd-8651-b05dc8a58f94', 'email': 'test_20260406_204551@example.com', 'name': None, 'address': None, 'dob': None, 'phone': None}"
     },
     {
       "test": "Update user profile",
       "success": true,
-      "details": "Status: 200, Updated profile: {'id': 'f7ec97d8-4df0-4b5a-876a-5e3f9eda4728', 'email': 'test_20260406_202913@example.com', 'name': 'Test User', 'address': '123 Test Street', 'dob': '01/01/1990', 'phone': '555-0123'}"
+      "details": "Status: 200, Updated profile: {'id': '64a7a3dc-43f1-40fd-8651-b05dc8a58f94', 'email': 'test_20260406_204551@example.com', 'name': 'Test User', 'address': '123 Test Street', 'dob': '01/01/1990', 'phone': '555-0123'}"
     },
     {
       "test": "Duplicate registration prevention",
@@ -56,6 +66,11 @@
       "test": "Invalid login rejection",
       "success": true,
       "details": "Status: 401 - Correctly rejected invalid credentials"
+    },
+    {
+      "test": "Audit log entries verification",
+      "success": true,
+      "details": "Status: 200 - All expected actions found: ['ADMIN_LOGIN', 'USER_REGISTERED', 'USER_LOGIN', 'PROFILE_UPDATED', 'CITATION_SEARCH']"
     }
   ]
 }

@@ -239,6 +239,95 @@ class CitationLookupAPITester:
             self.log_test("Admin submissions", False, f"Error: {str(e)}")
             return False, {}
 
+    def test_admin_csv_export(self):
+        """Test admin CSV export endpoint"""
+        try:
+            response = requests.get(f"{self.base_url}/admin/submissions/export")
+            success = response.status_code == 200
+            details = f"Status: {response.status_code}"
+            
+            if success:
+                content_type = response.headers.get('content-type', '')
+                content_disposition = response.headers.get('content-disposition', '')
+                details += f", Content-Type: {content_type}"
+                
+                # Check if it's CSV format
+                if 'text/csv' in content_type and 'attachment' in content_disposition:
+                    details += " - CSV export working correctly"
+                else:
+                    success = False
+                    details += " - Incorrect CSV response format"
+            else:
+                details += f", Error: {response.text}"
+                
+            self.log_test("Admin CSV export", success, details)
+            return success
+        except Exception as e:
+            self.log_test("Admin CSV export", False, f"Error: {str(e)}")
+            return False
+
+    def test_admin_audit_logs(self):
+        """Test admin audit logs endpoint"""
+        try:
+            response = requests.get(f"{self.base_url}/admin/audit-logs?limit=50")
+            success = response.status_code == 200
+            details = f"Status: {response.status_code}"
+            
+            if success:
+                data = response.json()
+                logs_count = len(data) if isinstance(data, list) else 0
+                details += f", Audit logs count: {logs_count}"
+                
+                # Check if logs have required fields
+                if logs_count > 0:
+                    first_log = data[0]
+                    required_fields = ['id', 'user_id', 'user_email', 'action', 'timestamp']
+                    missing_fields = [field for field in required_fields if field not in first_log]
+                    
+                    if not missing_fields:
+                        details += " - All required fields present"
+                    else:
+                        success = False
+                        details += f" - Missing fields: {missing_fields}"
+            else:
+                details += f", Error: {response.text}"
+                
+            self.log_test("Admin audit logs", success, details)
+            return success, response.json() if success else {}
+        except Exception as e:
+            self.log_test("Admin audit logs", False, f"Error: {str(e)}")
+            return False, {}
+
+    def test_audit_log_entries(self, expected_actions):
+        """Test that audit log entries are created for user actions"""
+        try:
+            response = requests.get(f"{self.base_url}/admin/audit-logs?limit=100")
+            success = response.status_code == 200
+            details = f"Status: {response.status_code}"
+            
+            if success:
+                data = response.json()
+                found_actions = [log['action'] for log in data]
+                
+                missing_actions = []
+                for action in expected_actions:
+                    if action not in found_actions:
+                        missing_actions.append(action)
+                
+                if not missing_actions:
+                    details += f" - All expected actions found: {expected_actions}"
+                else:
+                    success = False
+                    details += f" - Missing actions: {missing_actions}, Found: {list(set(found_actions))}"
+            else:
+                details += f", Error: {response.text}"
+                
+            self.log_test("Audit log entries verification", success, details)
+            return success
+        except Exception as e:
+            self.log_test("Audit log entries verification", False, f"Error: {str(e)}")
+            return False
+
     def test_duplicate_registration(self, email, password):
         """Test duplicate user registration should fail"""
         try:
@@ -283,7 +372,7 @@ class CitationLookupAPITester:
 
     def run_all_tests(self):
         """Run all API tests"""
-        print("🚀 Starting Citation Lookup API Tests")
+        print("🚀 Starting Citation Lookup API Tests (Admin Features)")
         print("=" * 50)
         
         # Test basic connectivity
@@ -296,21 +385,27 @@ class CitationLookupAPITester:
         
         # Test admin endpoints
         self.test_admin_submissions()
+        self.test_admin_csv_export()
+        self.test_admin_audit_logs()
         
         # Generate unique test email
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         test_email = f"test_{timestamp}@example.com"
         test_password = "TestPass123!"
         
+        # Track expected audit actions
+        expected_audit_actions = ['ADMIN_LOGIN']
+        
         # Test user registration
         success, user_data = self.test_register_user(test_email, test_password)
-        if not success:
-            print("❌ User registration failed - stopping user tests")
-        else:
+        if success:
+            expected_audit_actions.append('USER_REGISTERED')
             user_id = user_data.get('id')
             
             # Test user login
-            self.test_login_user(test_email, test_password)
+            login_success, _ = self.test_login_user(test_email, test_password)
+            if login_success:
+                expected_audit_actions.append('USER_LOGIN')
             
             # Test profile operations
             self.test_get_profile(user_id)
@@ -322,17 +417,26 @@ class CitationLookupAPITester:
                 "phone": "555-0123",
                 "email": test_email
             }
-            self.test_update_profile(user_id, profile_data)
+            profile_success, _ = self.test_update_profile(user_id, profile_data)
+            if profile_success:
+                expected_audit_actions.append('PROFILE_UPDATED')
             
             # Test duplicate registration
             self.test_duplicate_registration(test_email, test_password)
         
         # Test citation search (independent of user registration)
-        self.test_citation_search_valid()
+        citation_success, _ = self.test_citation_search_valid()
+        if citation_success:
+            expected_audit_actions.append('CITATION_SEARCH')
+            
         self.test_citation_search_invalid()
         
         # Test error cases
         self.test_invalid_login()
+        
+        # Test audit log entries after all actions
+        print("\n🔍 Verifying audit log entries...")
+        self.test_audit_log_entries(expected_audit_actions)
         
         # Print summary
         print("\n" + "=" * 50)
