@@ -12,22 +12,22 @@ const FederalKiosk = () => {
   const kioskImages = [
     {
       id: 1,
-      url: "https://customer-assets.emergentagent.com/job_source-check-5/artifacts/17o0c45w_IMG-20260225-WA0003%20%281%29.jpg",
+      url: "/images/kiosk-1.jpg",
       title: "Bonding Kiosk Screen"
     },
     {
       id: 2,
-      url: "https://customer-assets.emergentagent.com/job_source-check-5/artifacts/f10o65uq_IMG-20260225-WA0002%20%281%29.jpg",
+      url: "/images/kiosk-2.jpg",
       title: "Bonding Kiosk Machine"
     },
     {
       id: 3,
-      url: "https://customer-assets.emergentagent.com/job_source-check-5/artifacts/jnt20s68_IMG-20260225-WA0001%20%281%29.jpg",
+      url: "/images/kiosk-3.jpg",
       title: "Warrant Dismissal Division Notice"
     },
     {
       id: 4,
-      url: "https://customer-assets.emergentagent.com/job_source-check-5/artifacts/p3vgtlp2_IMG-20260225-WA0000%20%281%29.jpg",
+      url: "/images/kiosk-4.jpg",
       title: "Understanding Your Kiosk Deposit"
     }
   ];

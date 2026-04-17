@@ -5,7 +5,7 @@ const GovFooter = () => {
         {/* Seal and Description */}
         <div className="mb-6 sm:mb-8">
           <img 
-            src="https://customer-assets.emergentagent.com/job_source-check-5/artifacts/ycmxtu01_Screenshot_20260330_230610_Chrome.jpg"
+            src="/images/footer-logo.jpg"
             alt="Administrative Office of the United States Courts"
             className="w-16 h-16 sm:w-20 sm:h-20 mb-3 sm:mb-4 rounded-full object-cover"
           />

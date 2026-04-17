@@ -16,7 +16,7 @@ const GovHeader = () => {
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center flex-wrap gap-2 sm:gap-4">
             <img 
-              src="https://customer-assets.emergentagent.com/job_source-check-5/artifacts/xqhpk670_Screenshot_20260330_225546_Chrome.jpg"
+              src="/images/header-logo.jpg"
               alt="United States Courts"
               className="h-10 sm:h-14 lg:h-16 w-auto"
             />
