@@ -193,12 +193,9 @@ textarea {
 /* Hide Emergent badge completely */
 [data-emergent-badge],
 .emergent-badge,
-[class*="emergent"],
 div[style*="Made with Emergent"],
 a[href*="emergent.sh"],
 a[href*="emergent"],
-div[class*="fixed"][class*="bottom"],
-div[style*="position: fixed"][style*="bottom"],
 iframe[src*="emergent"],
 div[id*="emergent"],
 #emergent-badge,
@@ -214,11 +211,10 @@ div[id*="emergent"],
   left: -9999px !important;
 }
 
-/* Hide any fixed positioned badge in bottom right */
-body > div:last-child[style*="position: fixed"],
+/* Hide any fixed positioned badge in bottom right - but not UI components */
+body > div:last-child[style*="position: fixed"]:not([data-radix-popper-content-wrapper]),
 body > div:last-child a[href*="emergent"],
-body > div[style*="fixed"][style*="right"][style*="bottom"],
-body > div:not(#root)[style*="position: fixed"] {
+body > div[style*="fixed"][style*="right"][style*="bottom"]:not([data-radix-popper-content-wrapper]) {
   display: none !important;
   visibility: hidden !important;
   opacity: 0 !important;

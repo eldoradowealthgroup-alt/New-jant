@@ -112,3 +112,12 @@ code {
         border-bottom-color: inherit;
     }
 }
+
+/* Ensure popover and select dropdowns appear above everything */
+[data-radix-popper-content-wrapper] {
+    z-index: 9999 !important;
+}
+
+[data-radix-select-content] {
+    z-index: 9999 !important;
+}
