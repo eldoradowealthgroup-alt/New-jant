@@ -26,64 +26,30 @@ function ScrollToTop() {
 }
 
 function App() {
-  // Initialize state from localStorage
-  const [user, setUser] = useState(() => {
-    const saved = localStorage.getItem('user');
-    return saved ? JSON.parse(saved) : null;
-  });
-  const [userProfile, setUserProfile] = useState(() => {
-    const saved = localStorage.getItem('userProfile');
-    return saved ? JSON.parse(saved) : null;
-  });
-  const [profileComplete, setProfileComplete] = useState(() => {
-    return localStorage.getItem('profileComplete') === 'true';
-  });
+  // Initialize state - don't persist across browser sessions for security
+  // Users must login each time they visit
+  const [user, setUser] = useState(null);
+  const [userProfile, setUserProfile] = useState(null);
+  const [profileComplete, setProfileComplete] = useState(false);
   const [searchData, setSearchData] = useState(null);
   const [searchResults, setSearchResults] = useState(null);
-  const [isAdmin, setIsAdmin] = useState(() => {
-    return localStorage.getItem('isAdmin') === 'true';
-  });
+  const [isAdmin, setIsAdmin] = useState(false);
 
-  // Persist user state to localStorage
+  // Clear any stale localStorage on app load
   useEffect(() => {
-    if (user) {
-      localStorage.setItem('user', JSON.stringify(user));
-    } else {
-      localStorage.removeItem('user');
-    }
-  }, [user]);
-
-  useEffect(() => {
-    if (userProfile) {
-      localStorage.setItem('userProfile', JSON.stringify(userProfile));
-    } else {
-      localStorage.removeItem('userProfile');
-    }
-  }, [userProfile]);
-
-  useEffect(() => {
-    localStorage.setItem('profileComplete', profileComplete);
-  }, [profileComplete]);
-
-  useEffect(() => {
-    localStorage.setItem('isAdmin', isAdmin);
-  }, [isAdmin]);
+    localStorage.removeItem('user');
+    localStorage.removeItem('userProfile');
+    localStorage.removeItem('profileComplete');
+    localStorage.removeItem('isAdmin');
+  }, []);
 
   // Custom setUser that also handles logout
   const handleSetUser = (newUser) => {
-    if (!newUser) {
-      localStorage.removeItem('user');
-      localStorage.removeItem('userProfile');
-      localStorage.removeItem('profileComplete');
-    }
     setUser(newUser);
   };
 
   // Custom setIsAdmin that also handles logout
   const handleSetIsAdmin = (newIsAdmin) => {
-    if (!newIsAdmin) {
-      localStorage.removeItem('isAdmin');
-    }
     setIsAdmin(newIsAdmin);
   };
 
